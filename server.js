@@ -37,7 +37,7 @@ app.post("/contact", async (req, res) => {
   };
 
   // send mail to user
-  sendMail(name, email);
+  sendMail(name, email, message);
 
   return res.status(201).json({
     message: "Form Submitted Successfully",

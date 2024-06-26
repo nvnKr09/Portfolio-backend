@@ -1,7 +1,7 @@
 const { error } = require("console");
 const nodemailer = require("nodemailer");
 
-const sendMail = (name, email) => {
+const sendMail = (name, email, message) => {
   const transporter = nodemailer.createTransport({
     // host: "smtp.gmail.com",
     // port: 465,
@@ -13,7 +13,7 @@ const sendMail = (name, email) => {
     },
   });
   // mail options
-  const mailOptions = {
+  const mailOptionsToUser = {
     from: process.env.MY_EMAIL,
     to: email,
     subject: "Thank You for Contacting",
@@ -167,11 +167,28 @@ const sendMail = (name, email) => {
     `,
   };
 
-  transporter.sendMail(mailOptions, (error, info)=>{
+  // Email to yourself with tagging
+  const mailOptionsToSelf = {
+    from: process.env.MY_EMAIL,
+    to: process.env.MY_EMAIL,
+    subject: 'New Portfolio Form Submission',
+    text: `You have a new form submission from:\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`
+};
+
+  // sending mail
+  transporter.sendMail(mailOptionsToUser, (error, info)=>{
     if(error){
       console.log(error);
     }else{
-      console.log("Email sent: " + info.response);
+      console.log("Email sent to user: " + info.response);
+    }
+  })
+
+  transporter.sendMail(mailOptionsToSelf, (error, info)=>{
+    if(error){
+      console.log(error);
+    }else{
+      console.log("Email sent to admin: " + info.response);
     }
   })
 };
