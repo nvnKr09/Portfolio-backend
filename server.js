@@ -13,6 +13,10 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true })); //data from form
 app.use(express.json()); //data comes from axios fetch or postman
 
+app.get('/', (req,res)=>{
+  res.send("Server is up and running");
+})
+
 app.post("/contact", async (req, res) => {
   console.log(req.body);
 
